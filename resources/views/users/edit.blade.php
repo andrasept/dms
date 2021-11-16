@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="bg-light p-4 rounded">
-        <h1>Update user</h1>
+        <h1>Update User</h1>
         <div class="lead">
             
         </div>

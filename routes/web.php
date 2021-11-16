@@ -24,8 +24,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
         /**
          * Register Routes
          */
-        Route::get('/register', 'RegisterController@show')->name('register.show');
-        Route::post('/register', 'RegisterController@register')->name('register.perform');
+        // Route::get('/register', 'RegisterController@show')->name('register.show');
+        // Route::post('/register', 'RegisterController@register')->name('register.perform');
 
         /**
          * Login Routes
@@ -35,7 +35,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
 
     });
 
-    Route::group(['middleware' => ['auth', 'permission']], function() {
+    Route::group(['middleware' => ['auth', 'permission']], function() { // harus login terlebih dahulu untuk akses route2 di dalam ini
         /**
          * Logout Routes
          */
@@ -55,7 +55,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
         });
 
         /**
-         * User Routes
+         * Post Routes
          */
         Route::group(['prefix' => 'posts'], function() {
             Route::get('/', 'PostsController@index')->name('posts.index');
@@ -67,7 +67,24 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
             Route::delete('/{post}/delete', 'PostsController@destroy')->name('posts.destroy');
         });
 
+        /**
+         * Demo
+         */
+        Route::group(['prefix' => 'demo'], function() {
+            Route::get('/', 'DemoController@index')->name('demo.index');
+            Route::get('/trash', 'DemoController@trash')->name('demo.trash');
+            Route::get('/create', 'DemoController@create')->name('demo.create');
+            Route::post('/create', 'DemoController@store')->name('demo.store');
+            Route::get('/{post}/show', 'DemoController@show')->name('demo.show');
+            Route::get('/{post}/edit', 'DemoController@edit')->name('demo.edit');
+            Route::patch('/{post}/update', 'DemoController@update')->name('demo.update');
+            Route::delete('/{post}/delete', 'DemoController@destroy')->name('demo.destroy');
+        });
+
         Route::resource('roles', RolesController::class);
         Route::resource('permissions', PermissionsController::class);
+
+        Route::get('/register', 'RegisterController@show')->name('register.show');
+        Route::post('/register', 'RegisterController@register')->name('register.perform');
     });
 });

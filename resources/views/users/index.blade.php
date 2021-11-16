@@ -1,11 +1,9 @@
 @extends('layouts.app-master')
 
 @section('content')
-    
-    <h1 class="mb-3">Laravel 8 User Roles and Permissions Step by Step Tutorial - codeanddeploy.com</h1>
 
     <div class="bg-light p-4 rounded">
-        <h1>Users</h1>
+        <h1>Users Management</h1>
         <div class="lead">
             Manage your users here.
             <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm float-right">Add new user</a>
