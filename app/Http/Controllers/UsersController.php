@@ -15,11 +15,22 @@ class UsersController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function index() 
+    // public function index() 
+    public function index(Request $request)
     {
-        $users = User::latest()->paginate(10);
+        // $users = User::latest()->paginate(10);
+        // return view('users.index', compact('users'));
 
+        // $roles = Role::all();
+
+        // with softdeletes
+        $users = User::latest();
+        if($request->get('status') == 'archived') {
+            $users = $users->onlyTrashed();
+        }
+        $users = $users->paginate(10);
         return view('users.index', compact('users'));
+        // return view('users.index', compact('users','roles'));
     }
 
     /**
@@ -113,6 +124,50 @@ class UsersController extends Controller
 
         return redirect()->route('users.index')
             ->withSuccess(__('User deleted successfully.'));
+    }
+
+    /**
+     *  Restore user data
+     * 
+     * @param User $user
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id) 
+    {
+        User::where('id', $id)->withTrashed()->restore();
+
+        return redirect()->route('users.index', ['status' => 'archived'])
+            ->withSuccess(__('User restored successfully.'));
+    }
+
+    /**
+     * Force delete user data
+     * 
+     * @param User $user
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function forceDelete($id) 
+    {
+        User::where('id', $id)->withTrashed()->forceDelete();
+
+        return redirect()->route('users.index', ['status' => 'archived'])
+            ->withSuccess(__('User force deleted successfully.'));
+    }
+
+    /**
+     * Restore all archived users
+     * 
+     * @param User $user
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function restoreAll() 
+    {
+        User::onlyTrashed()->restore();
+
+        return redirect()->route('users.index')->withSuccess(__('All users restored successfully.'));
     }
 }
 

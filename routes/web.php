@@ -52,6 +52,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
             Route::get('/{user}/edit', 'UsersController@edit')->name('users.edit');
             Route::patch('/{user}/update', 'UsersController@update')->name('users.update');
             Route::delete('/{user}/delete', 'UsersController@destroy')->name('users.destroy');
+
+            Route::post('/{user}/restore', 'UsersController@restore')->name('users.restore');
+            Route::delete('/{user}/force-delete', 'UsersController@forceDelete')->name('users.force-delete');
+            Route::post('/restore-all', 'UsersController@restoreAll')->name('users.restore-all');
         });
 
         /**
