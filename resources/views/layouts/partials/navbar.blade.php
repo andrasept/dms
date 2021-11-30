@@ -10,10 +10,21 @@
         @auth
 
           @role('admin')
-          <li><a href="{{ route('users.index') }}" class="nav-link px-2 text-white">Users</a></li>
-          <li><a href="{{ route('roles.index') }}" class="nav-link px-2 text-white">Roles</a></li>
-          <li><a href="{{ route('permissions.index') }}" class="nav-link px-2 text-white">Permissions</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">MPP</a></li>
+          <li class="nav-item px-2 text-white dropdown" id="myDropdown">
+            <a class="nav-link text-white dropdown-toggle" href="#" data-bs-toggle="dropdown">Users</a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ route('users.index') }}" class="dropdown-item">Users</a></li>
+              <li><a href="{{ route('roles.index') }}" class="dropdown-item">Roles</a></li>
+              <li><a href="{{ route('permissions.index') }}" class="dropdown-item">Permissions</a></li>
+            </ul>
+          </li>
+          <li class="nav-item px-2 text-white dropdown" id="myDropdown">
+            <a class="nav-link text-white dropdown-toggle" href="#" data-bs-toggle="dropdown">Masters</a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ route('departments.index') }}" class="dropdown-item">Departments</a></li>
+            </ul>
+          </li>          
+          <!-- <li><a href="#" class="nav-link px-2 text-white">MPP</a></li> -->
           @endrole
           <li><a href="{{ route('posts.index') }}" class="nav-link px-2 text-white">Posts</a></li>
         @endauth
@@ -33,7 +44,7 @@
       @guest
         <div class="text-end">
           <a href="{{ route('login.perform') }}" class="btn btn-outline-light me-2">Login</a>
-          <a href="{{ route('register.perform') }}" class="btn btn-warning">Sign-up</a>
+          <!-- <a href="{{ route('register.perform') }}" class="btn btn-warning">Sign-up</a> -->
         </div>
       @endguest
     </div>

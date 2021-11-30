@@ -90,5 +90,18 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
 
         Route::get('/register', 'RegisterController@show')->name('register.show');
         Route::post('/register', 'RegisterController@register')->name('register.perform');
+
+        // Department
+        Route::resource('departments', DepartmentController::class);
+        // Route::post('/{department}/restore', 'DepartmentController@restore')->name('departments.restore');
+        // Route::delete('/{department}/force-delete', 'DepartmentController@forceDelete')->name('departments.force-delete');
+        // Route::post('/restore-all', 'DepartmentController@restoreAll')->name('departments.restore-all');
+
+        // Section
+        Route::resource('sections', SectionController::class);
+        // Route::post('/{section}/restore', 'SectionController@restore')->name('sections.restore');
+        // Route::delete('/{section}/force-delete', 'SectionController@forceDelete')->name('sections.force-delete');
+        // Route::post('/restore-all', 'SectionController@restoreAll')->name('sections.restore-all');
+        
     });
 });

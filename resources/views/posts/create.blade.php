@@ -49,7 +49,7 @@
                 </div>
                 
 
-                <button type="submit" class="btn btn-primary">Save role</button>
+                <button type="submit" class="btn btn-primary">Save post</button>
                 <a href="{{ route('posts.index') }}" class="btn btn-default">Back</a>
             </form>
         </div>
