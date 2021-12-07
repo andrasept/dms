@@ -24,9 +24,11 @@
               <li><a href="{{ route('departments.index') }}" class="dropdown-item">Departments</a></li>
             </ul>
           </li>          
-          <!-- <li><a href="#" class="nav-link px-2 text-white">MPP</a></li> -->
+          <li><a href="{{ route('files.index') }}" class="nav-link px-2 text-white">Files</a></li>
           @endrole
-          <li><a href="{{ route('posts.index') }}" class="nav-link px-2 text-white">Posts</a></li>
+          <!-- <li><a href="{{ route('posts.index') }}" class="nav-link px-2 text-white">Posts</a></li> -->
+          <!-- SIAPKAN ROLE HRGA, FINANCE, DAN DEPT LAINNYA -->
+          <!-- BUAT PAGE KHUSUS UNTUK ROLE2 TERSEBUT -->
         @endauth
       </ul>
 

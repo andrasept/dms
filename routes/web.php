@@ -102,6 +102,23 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
         // Route::post('/{section}/restore', 'SectionController@restore')->name('sections.restore');
         // Route::delete('/{section}/force-delete', 'SectionController@forceDelete')->name('sections.force-delete');
         // Route::post('/restore-all', 'SectionController@restoreAll')->name('sections.restore-all');
+
+        /**
+         * File Routes
+         */
+        Route::group(['prefix' => 'files'], function() {
+            Route::get('/', 'FilesController@index')->name('files.index');
+            Route::get('/create', 'FilesController@create')->name('files.create');
+            Route::post('/create', 'FilesController@store')->name('files.store');
+            Route::get('/{post}/show', 'FilesController@show')->name('files.show');
+            Route::get('/{post}/edit', 'FilesController@edit')->name('files.edit');
+            Route::patch('/{post}/update', 'FilesController@update')->name('files.update');
+            Route::delete('/{post}/delete', 'FilesController@destroy')->name('files.destroy');
+
+            // Route::get('/files', 'FilesController@index')->name('files.index');
+            // Route::get('/files/add', 'FilesController@create')->name('files.create');
+            // Route::post('/files/add', 'FilesController@store')->name('files.store');
+        });
         
     });
 });
