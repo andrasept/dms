@@ -12,7 +12,11 @@
             buat 2 bulan sebelum date_exp, tampilkan terus sampai lewat dari date_exp<br/>
             tampilkan list foreach, lalu buatkan modal window atau accordion, atau open link new tab untuk menampilkan semua dokumen yg exp
             <br/>
-            <p></p>
+            <p>
+                @foreach ($doc_date_exps as $key => $date_exp)
+                    {{ $date_exp }} <br/>
+                @endforeach
+            </p>
             <a href="{{ route('files.create') }}" class="btn btn-primary btn-sm float-right">Add Document</a>
             <br/><br/>
         </div>
