@@ -12,9 +12,43 @@
             buat 2 bulan sebelum date_exp, tampilkan terus sampai lewat dari date_exp<br/>
             tampilkan list foreach, lalu buatkan modal window atau accordion, atau open link new tab untuk menampilkan semua dokumen yg exp
             <br/>
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Expired Documents
+                      </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                      <div class="accordion-body">
+                        Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.
+                      </div>
+                    </div>
+                  </div>
+                </div>
             <p>
-                @foreach ($doc_date_exps as $key => $date_exp)
-                    {{ $date_exp }} <br/>
+                @foreach ($files as $key => $file)
+                    <?php
+                        $date_exp = $file->doc_date_exp;
+                        $orderdate=$date_exp;
+                        $orderdate = explode('-', $orderdate);
+                        $day   = $orderdate[2];
+                        $month = $orderdate[1];
+                        $year  = $orderdate[0];
+
+                        $date_exp = Carbon\Carbon::create($year, $month, $day, 0);
+                        // expire date
+                        // echo $date_exp."<br/>"; 
+                        // 1 month to expired
+                        $date_exp_2mo = $date_exp->subMonth(2);
+                        // echo $date_exp_2mo."<br/>"; 
+                        // if curr_date >= 2-mo-to-exp && curr_date <= date_exp
+                        // if (($current_date >= $date_exp_2mo) && ($current_date <= $date_exp)) {
+                        if (($current_date >= $date_exp_2mo) || ($current_date >= $date_exp)) {
+                            echo $file->doc_name;
+                            echo " masuk ke masa tenggang expired di ".$date_exp."<br/>";
+                        } 
+                    ?>
                 @endforeach
             </p>
             <a href="{{ route('files.create') }}" class="btn btn-primary btn-sm float-right">Add Document</a>
