@@ -32,34 +32,45 @@ class FilesController extends Controller
         $current_date = date('Y-m-d');    
         // $current_date = "2012-12-07";    
 
-        // foreach ($files as $f) {           
-        //     // echo $date_exp->doc_date_exp."<br/>";
-        //     $date_exp = $f->doc_date_exp;
-        //     $orderdate=$date_exp;
-        //     $orderdate = explode('-', $orderdate);
-        //     $day   = $orderdate[2];
-        //     $month = $orderdate[1];
-        //     $year  = $orderdate[0];
+        $check_date_exp = 0;
+        $i = 0;
+        foreach ($files as $f) {  
+            // echo $date_exp->doc_date_exp."<br/>";
+            $date_exp = $f->doc_date_exp;
+            $orderdate=$date_exp;
+            $orderdate = explode('-', $orderdate);
+            $day   = $orderdate[2];
+            $month = $orderdate[1];
+            $year  = $orderdate[0];
 
-        //     $date_exp = Carbon::create($year, $month, $day, 0);
-        //     // expire date
-        //     echo $date_exp."<br/>"; 
-        //     // 1 month to expired
-        //     $date_exp_2mo = $date_exp->subMonth(2);
-        //     echo $date_exp_2mo."<br/>"; 
-        //     // if curr_date >= 2-mo-to-exp && curr_date <= date_exp
-        //     // if (($current_date >= $date_exp_2mo) && ($current_date <= $date_exp)) {
-        //     if (($current_date >= $date_exp_2mo) || ($current_date >= $date_exp)) {
-        //         echo $f->doc_name;
-        //         echo " masuk ke masa tenggang expired di ".$date_exp."<br/><br/>";
-        //     } else {
-        //         echo "<br/>";
-        //     }
+            $date_exp = Carbon::create($year, $month, $day, 0);
+            // expire date
+            // echo $date_exp."<br/>"; 
+            // 1 month to expired
+            $date_exp_2mo = $date_exp->subMonth(2);
+            // echo $date_exp_2mo."<br/>"; 
+            // if curr_date >= 2-mo-to-exp && curr_date <= date_exp
+            // if (($current_date >= $date_exp_2mo) && ($current_date <= $date_exp)) {
+            if (($current_date >= $date_exp_2mo) || ($current_date >= $date_exp)) {
+                $i++;
+                // echo $f->doc_name;
+                // echo " masuk ke masa tenggang expired di ".$date_exp."<br/><br/>";
+                $check_date_exp=1;
+                // echo $i."<br/>";
+            }
 
-        //     LANJUT MASUKKAN NOTIF NYA (ATAU LOGIC NYA) KE BLADE
-        // }
+            // LANJUT MASUKKAN NOTIF NYA (ATAU LOGIC NYA) KE BLADE
+        }
+        // echo $i;
+
+        if ($i>0) {
+            $total_date_exp = $i; 
+        } else {
+            $total_date_exp = 0;
+        }
+        // echo $total_date_exp;     
         
-        return view('files.index', compact('files','departments','users','current_date'));
+        return view('files.index', compact('files','departments','users','current_date','check_date_exp','total_date_exp'));
         // return view('files.index', compact('files','departments','users','doc_date_exps'));
     }
 

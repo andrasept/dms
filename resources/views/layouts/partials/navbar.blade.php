@@ -26,10 +26,19 @@
           </li>          
           <li><a href="{{ route('files.index') }}" class="nav-link px-2 text-white">Files</a></li>
           @endrole
+
           <!-- <li><a href="{{ route('posts.index') }}" class="nav-link px-2 text-white">Posts</a></li> -->
           <!-- SIAPKAN ROLE HRGA, FINANCE, DAN DEPT LAINNYA -->
           <!-- BUAT PAGE KHUSUS UNTUK ROLE2 TERSEBUT -->
         @endauth
+
+        @auth
+          @role('HRGA')
+            <!-- harusnya files.hrga.index -->
+            <li><a href="{{ route('files.index') }}" class="nav-link px-2 text-white">Files</a></li>
+          @endrole
+        @endauth
+
       </ul>
 
       <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
