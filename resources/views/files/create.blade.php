@@ -26,6 +26,19 @@
                     @endif
                 </div>
                 <div class="mb-3">
+                    <label for="doc_number" class="form-label">Nomor Dokumen</label>
+                    <input value="{{ old('doc_number') }}" 
+                        type="text" 
+                        class="form-control" 
+                        name="doc_number" 
+                        placeholder="format-nomor-surat-001" required>
+
+                    @if ($errors->has('doc_number'))
+                        <span class="text-danger text-left">{{ $errors->first('doc_number') }}</span>
+                    @endif
+                </div>
+
+                <div class="mb-3">
                     <label for="doc_name" class="form-label">Nama Dokumen</label>
                     <input value="{{ old('doc_name') }}" 
                         type="text" 
@@ -44,7 +57,7 @@
                         type="date" 
                         class="form-control" 
                         name="doc_date" 
-                        placeholder="Tanggal Dokumen" required>
+                        placeholder="Tanggal Dokumen">
 
                     @if ($errors->has('doc_date'))
                         <span class="text-danger text-left">{{ $errors->first('doc_date') }}</span>
@@ -57,7 +70,7 @@
                         type="date" 
                         class="form-control" 
                         name="doc_date_exp" 
-                        placeholder="Tanggal Dokumen Expired" required>
+                        placeholder="Tanggal Dokumen Expired">
 
                     @if ($errors->has('doc_date_exp'))
                         <span class="text-danger text-left">{{ $errors->first('doc_date_exp') }}</span>

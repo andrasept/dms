@@ -13,6 +13,7 @@ class File extends Model
     protected $table = 'files';
 
     protected $fillable = [
+        'doc_number',
         'doc_name',
         'doc_date',
         'doc_date_exp',

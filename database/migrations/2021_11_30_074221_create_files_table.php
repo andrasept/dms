@@ -15,6 +15,7 @@ class CreateFilesTable extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();          
+            $table->string('doc_number');
             $table->mediumText('doc_name');
             $table->date('doc_date');
             $table->date('doc_date_exp');

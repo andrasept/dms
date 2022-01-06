@@ -35,29 +35,32 @@ class FilesController extends Controller
         $check_date_exp = 0;
         $i = 0;
         foreach ($files as $f) {  
-            // echo $date_exp->doc_date_exp."<br/>";
-            $date_exp = $f->doc_date_exp;
-            $orderdate=$date_exp;
-            $orderdate = explode('-', $orderdate);
-            $day   = $orderdate[2];
-            $month = $orderdate[1];
-            $year  = $orderdate[0];
 
-            $date_exp = Carbon::create($year, $month, $day, 0);
-            // expire date
-            // echo $date_exp."<br/>"; 
-            // 1 month to expired
-            $date_exp_2mo = $date_exp->subMonth(2);
-            // echo $date_exp_2mo."<br/>"; 
-            // if curr_date >= 2-mo-to-exp && curr_date <= date_exp
-            // if (($current_date >= $date_exp_2mo) && ($current_date <= $date_exp)) {
-            if (($current_date >= $date_exp_2mo) || ($current_date >= $date_exp)) {
-                $i++;
-                // echo $f->doc_name;
-                // echo " masuk ke masa tenggang expired di ".$date_exp."<br/><br/>";
-                $check_date_exp=1;
-                // echo $i."<br/>";
-            }
+            if ($f->doc_date_exp || $f->doc_date) {
+                // echo $date_exp->doc_date_exp."<br/>";
+                $date_exp = $f->doc_date_exp;
+                $orderdate=$date_exp;
+                $orderdate = explode('-', $orderdate);
+                $day   = $orderdate[2];
+                $month = $orderdate[1];
+                $year  = $orderdate[0];
+
+                $date_exp = Carbon::create($year, $month, $day, 0);
+                // expire date
+                // echo $date_exp."<br/>"; 
+                // 1 month to expired
+                $date_exp_2mo = $date_exp->subMonth(2);
+                // echo $date_exp_2mo."<br/>"; 
+                // if curr_date >= 2-mo-to-exp && curr_date <= date_exp
+                // if (($current_date >= $date_exp_2mo) && ($current_date <= $date_exp)) {
+                if (($current_date >= $date_exp_2mo) || ($current_date >= $date_exp)) {
+                    $i++;
+                    // echo $f->doc_name;
+                    // echo " masuk ke masa tenggang expired di ".$date_exp."<br/><br/>";
+                    $check_date_exp=1;
+                    // echo $i."<br/>";
+                }
+            }            
 
             // LANJUT MASUKKAN NOTIF NYA (ATAU LOGIC NYA) KE BLADE
         }
@@ -95,6 +98,7 @@ class FilesController extends Controller
     {
         // $fileName = auth()->id() . '_' . time() . '.'. $request->file->extension();  
         $doc_name = $request->input('doc_name') . '_' . time() . '.'. $request->file->extension();  
+        $doc_number = $request->input('doc_number');  
         $doc_date = $request->input('doc_date');  
         $doc_date_exp = $request->input('doc_date_exp');  
         $doc_note = $request->input('doc_note');  
@@ -106,6 +110,7 @@ class FilesController extends Controller
         $request->file->move(public_path('file'), $doc_name);
 
         File::create([
+            'doc_number' => $doc_number,
             'doc_name' => $doc_name,
             'doc_date' => $doc_date,
             'doc_date_exp' => $doc_date_exp,

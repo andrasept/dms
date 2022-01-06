@@ -19,33 +19,37 @@
           <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
             <div class="accordion-body">
               @foreach ($files as $key => $file)
-              <?php
-                $date_exp = $file->doc_date_exp;
-                $orderdate=$date_exp;
-                $orderdate = explode('-', $orderdate);
-                $day   = $orderdate[2];
-                $month = $orderdate[1];
-                $year  = $orderdate[0];
 
-                $date_exp = Carbon\Carbon::create($year, $month, $day, 0);
-                // expire date
-                // echo $date_exp."<br/>"; 
-                // 1 month to expired
-                $date_exp_2mo = $date_exp->subMonth(2);
-                // echo $date_exp_2mo."<br/>"; 
-                // if curr_date >= 2-mo-to-exp && curr_date <= date_exp
-                // if (($current_date >= $date_exp_2mo) && ($current_date <= $date_exp)) {
-                // jika ada dokumen yang expired
-                if (($current_date >= $date_exp_2mo) || ($current_date >= $date_exp)) {
-                  // echo $file->doc_name;
-                  // echo " masuk ke masa tenggang expired di ".$date_exp."<br/>";
-                  echo $file->doc_name;
-                  // echo " expired di ".$date_exp."<br/>"; 
-                  $originalDate = $date_exp;
-                  $newDate = date("Y-m-d", strtotime($originalDate));                       
-                  echo " expired di ".$newDate."<br/>";                        
-                } 
-              ?>
+                @if($file->doc_date || $file->doc_date_exp)
+                  <?php
+                  $date_exp = $file->doc_date_exp;
+                  $orderdate=$date_exp;
+                  $orderdate = explode('-', $orderdate);
+                  $day   = $orderdate[2];
+                  $month = $orderdate[1];
+                  $year  = $orderdate[0];
+
+                  $date_exp = Carbon\Carbon::create($year, $month, $day, 0);
+                  // expire date
+                  // echo $date_exp."<br/>"; 
+                  // 1 month to expired
+                  $date_exp_2mo = $date_exp->subMonth(2);
+                  // echo $date_exp_2mo."<br/>"; 
+                  // if curr_date >= 2-mo-to-exp && curr_date <= date_exp
+                  // if (($current_date >= $date_exp_2mo) && ($current_date <= $date_exp)) {
+                  // jika ada dokumen yang expired
+                  if (($current_date >= $date_exp_2mo) || ($current_date >= $date_exp)) {
+                    // echo $file->doc_name;
+                    // echo " masuk ke masa tenggang expired di ".$date_exp."<br/>";
+                    echo $file->doc_name;
+                    // echo " expired di ".$date_exp."<br/>"; 
+                    $originalDate = $date_exp;
+                    $newDate = date("Y-m-d", strtotime($originalDate));                       
+                    echo " expired di ".$newDate."<br/>";                        
+                  } 
+                ?>
+                @endif
+
               @endforeach
             </div>
           </div>
@@ -67,12 +71,13 @@
       <tr>
         <th>No</th>
         <th>Dept.</th>
+        <th>No. Dok</th>
         <th>Name</th>
         <th>Tanggal</th>
         <th>Tanggal Exp.</th>
         <th>Notes</th>
         <!-- <th>Size</th> -->
-        <th>Type</th>
+        <!-- <th>Type</th> -->
         <th>Upload By</th>
         <th>Upload At</th>
         <th>Action</th>
@@ -89,12 +94,13 @@
           @endif
           @endforeach
         </td>
+        <td>{{ $file->doc_number }}</td>
         <td>{{ $file->doc_name }}</td>
         <td>{{ $file->doc_date }}</td>
         <td>{{ $file->doc_date_exp }}</td>
         <td>{{ $file->doc_note }}</td>
         <!-- <td>{{ $file->doc_size }}</td> -->
-        <td>{{ $file->doc_type }}</td>
+        <!-- <td>{{ $file->doc_type }}</td> -->
         <td>
           @foreach ($users as $key3 => $user)
           @if ($file->created_by == $user->id)
