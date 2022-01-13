@@ -119,6 +119,21 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
             // Route::get('/files/add', 'FilesController@create')->name('files.create');
             // Route::post('/files/add', 'FilesController@store')->name('files.store');
         });
+
+        // Categories
+        // Route::get('/category','CategoryController@index')->name('category.index');
+        // Route::resource('categories', CategoryController::class);
+        // Route::get('/categories/categorytree', 'CategoryController@categorytree');
+        Route::group(['prefix' => 'categories'], function() {
+            Route::get('/', 'CategoryController@index')->name('categories.index');
+            Route::get('/categorytree', 'CategoryController@categorytree')->name('categories.categorytree');
+            Route::get('/create', 'CategoryController@create')->name('categories.create');
+            Route::post('/create', 'CategoryController@store')->name('categories.store');
+            Route::get('/{post}/show', 'CategoryController@show')->name('categories.show');
+            Route::get('/{post}/edit', 'CategoryController@edit')->name('categories.edit');
+            Route::patch('/{post}/update', 'CategoryController@update')->name('categories.update');
+            Route::delete('/{post}/delete', 'CategoryController@destroy')->name('categories.destroy');
+        });
         
     });
 });

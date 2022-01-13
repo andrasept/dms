@@ -44,8 +44,32 @@
                         <span class="text-danger text-left">{{ $errors->first('username') }}</span>
                     @endif
                 </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input value="{{ old('password') }}"
+                        type="password" 
+                        class="form-control" 
+                        name="password" 
+                        placeholder="Password" required>
+                    @if ($errors->has('password'))
+                        <span class="text-danger text-left">{{ $errors->first('password') }}</span>
+                    @endif
+                </div>
 
-                <button type="submit" class="btn btn-primary">Save user</button>
+                <div class="mb-3">
+                    <label for="dept_id" class="form-label">Department</label>
+                    <select class="form-control" id="dept_id" name="dept_id" required="required" >
+                        <option value="" selected="selected"> -- Select -- </option>
+                        @foreach ($departments as $dept)
+                            <option value="{{ $dept->id }}" >{{ $dept->name}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('dept_id'))
+                        <span class="text-danger text-left">{{ $errors->first('dept_id') }}</span>
+                    @endif
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save User</button>
                 <a href="{{ route('users.index') }}" class="btn btn-default">Back</a>
             </form>
         </div>

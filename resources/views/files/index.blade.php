@@ -60,6 +60,20 @@
     <br/>
     <a href="{{ route('files.create') }}" class="btn btn-primary btn-sm float-left">Add Document</a>
     <br/><br/>
+    <div class="mb-3">
+      <label for="category_id" class="label">Categories :</label>
+      <select class="" id="category_id" name="category_id" required="required" >        
+        <option value="" selected="selected"> Select Categories </option>
+        @foreach($parentCategories as $category)    
+          <option value="{{$category->id}}"> {{$category->name}} </option>
+
+          @if(count($category->subcategory))
+            @include('categories.subCategoryIndex',['subcategories' => $category->subcategory])
+          @endif
+       
+        @endforeach
+      </select>
+    </div>
   </div>
 
   <div class="mt-2">
@@ -83,16 +97,23 @@
         <th>Action</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody> 
       @foreach ($files as $key => $file)
       <tr>
         <td>{{ $loop->iteration + (($files->currentPage() -1) * $files->perPage())  }}</td>
         <td>
           @foreach ($departments as $key2 => $dept)
-          @if ($file->dept_id == $dept->id)
-          {{ $dept->name }}
-          @endif
+            @if ($file->dept_id == $dept->id)
+              {{ $dept->name }}<br/>
+            @endif
           @endforeach
+
+          @foreach ($categories as $key3 => $cat)
+            @if ($file->category_id == $cat->id)
+              <span class="badge" style="color:#333; font-size: 14px;">{{ $cat->name }}</span>
+            @endif
+          @endforeach
+
         </td>
         <td>{{ $file->doc_number }}</td>
         <td>{{ $file->doc_name }}</td>
@@ -103,9 +124,9 @@
         <!-- <td>{{ $file->doc_type }}</td> -->
         <td>
           @foreach ($users as $key3 => $user)
-          @if ($file->created_by == $user->id)
-          {{ $user->name }}
-          @endif
+            @if ($file->created_by == $user->id)
+              {{ $user->name }}
+            @endif
           @endforeach
         </td>
         <td>{{ $file->created_at }}</td>

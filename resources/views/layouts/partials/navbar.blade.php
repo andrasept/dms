@@ -35,7 +35,9 @@
         @auth
           @role('HRGA')
             <!-- harusnya files.hrga.index -->
+            <!-- <li><a href="{{ route('files.index') }}" class="nav-link px-2 text-white">Files {{$tests_navbar ?? 'gak ada'}}</a></li> -->
             <li><a href="{{ route('files.index') }}" class="nav-link px-2 text-white">Files</a></li>
+            <li><a href="{{ route('categories.index') }}" class="nav-link px-2 text-white">Categories</a></li>
           @endrole
         @endauth
 

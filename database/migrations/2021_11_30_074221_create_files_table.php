@@ -22,6 +22,7 @@ class CreateFilesTable extends Migration
             $table->mediumText('doc_note');
             $table->string('doc_type');
             $table->string('doc_size');
+            $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('dept_id');
             $table->unsignedBigInteger('created_by');
             $table->timestamps();

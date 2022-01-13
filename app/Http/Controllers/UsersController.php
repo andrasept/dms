@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+
 
 class UsersController extends Controller
 {
@@ -40,7 +45,8 @@ class UsersController extends Controller
      */
     public function create() 
     {
-        return view('users.create');
+        $data['departments']=Department::select('id','name')->orderBy('name')->get();
+        return view('users.create', $data);
     }
 
     /**
@@ -55,9 +61,18 @@ class UsersController extends Controller
     {
         //For demo purposes only. When creating user or inviting a user
         // you should create a generated random password and email it to the user
-        $user->create(array_merge($request->validated(), [
-            'password' => 'test' 
-        ]));
+        // dr4: pass default admin123
+
+        User::create(array_merge($request->only('name', 'email', 'username', 'password', 'dept_id')));
+
+        // $user->create(array_merge($request->validated(), [
+        //     'password' => 'test' 
+        //     'password' => Hash::make($request->password) 
+        // ]));
+
+        // $request->user()->fill([
+        //     'password' => Hash::make($request->newPassword)
+        // ])->save();
 
         return redirect()->route('users.index')
             ->withSuccess(__('User created successfully.'));

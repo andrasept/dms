@@ -12,19 +12,36 @@
             <form action="{{ route('files.store') }}" method="post" enctype="multipart/form-data">
                 @include('layouts.partials.messages')
                 @csrf
+                
+                @role("admin")
                 <div class="mb-3">
                     <label for="dept_id" class="form-label">Department</label>
-                        <select class="form-control" id="dept_id" name="dept_id" required="required" >
-                            <option value="15" selected="selected"> All Department </option>
-                            @foreach ($departments as $dept)
-                                <option value="{{ $dept->id }}" >{{ $dept->name}}</option>
-                            @endforeach
-                      </select>
+                    <select class="form-control" id="dept_id" name="dept_id" required="required" >
+                        <option value="15" selected="selected"> All Department </option>
+                        @foreach ($departments as $dept)
+                            <option value="{{ $dept->id }}" >{{ $dept->name}}</option>
+                        @endforeach
+                    </select>
 
                     @if ($errors->has('dept_id'))
                         <span class="text-danger text-left">{{ $errors->first('dept_id') }}</span>
                     @endif
                 </div>
+                @endrole
+
+                @role("HRGA")
+                    <div class="mb-3">
+                        <label for="dept_id" class="form-label">Department</label>
+                        <select class="form-control" id="dept_id" name="dept_id" required="required" >
+                            <option value="6" selected="selected"> HRGA EHS EXIM IT </option>
+                            <option value="15" selected="selected"> All Department </option>
+                        </select>
+                        @if ($errors->has('dept_id'))
+                            <span class="text-danger text-left">{{ $errors->first('dept_id') }}</span>
+                        @endif
+                    </div>
+                @endrole
+
                 <div class="mb-3">
                     <label for="doc_number" class="form-label">Nomor Dokumen</label>
                     <input value="{{ old('doc_number') }}" 

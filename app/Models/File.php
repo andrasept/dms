@@ -20,6 +20,7 @@ class File extends Model
         'doc_note',
         'doc_type',
         'doc_size',
+        'category_id',
         'dept_id',
         'created_by'
     ];

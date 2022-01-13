@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use App\Models\Department;
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Http\Requests\StoreFileRequest;
@@ -27,7 +28,40 @@ class FilesController extends Controller
 
         $departments = Department::all();
         $users = User::all();
+        // $files = File::latest()->paginate(10);
         $files = File::latest()->paginate(10);
+        $user_id = auth()->user()->id;
+        $dept_id = auth()->user()->dept_id;
+        // category_id cari dari table user dan category
+        // select category_id where category.created_by = user.id
+        // select categories.id, categories.name from files, users, categories where categories.created_by = users.id AND files.category_id=categories.id
+        
+        // $files_cats = DB::table('files')
+        //     ->join('categories', 'files.category_id', '=', 'categories.id')
+        //     ->join('users', 'categories.created_by', '=', 'users.id')
+        //     ->select('categories.id', 'categories.name')
+        //     ->get();
+        // var_dump($files_cats); exit();
+
+        if ($dept_id == 0) { // Admin
+            $files = File::latest()->paginate(10);
+            $categories = Category::all();
+        } else {
+            $files = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->paginate(10);
+            // $categories = Category::where('created_by',$user_id)->orWhere('category_id',$category_id)->get();
+            $categories = DB::table('files')
+                ->join('categories', 'files.category_id', '=', 'categories.id')
+                ->join('users', 'categories.created_by', '=', 'users.id')
+                ->select('categories.id', 'categories.name')
+                ->get();
+        }        
+        // $categories = Category::all();
+        // $parentCategories = Category::where('parent_id',0)->get();
+        if ($dept_id == 0) { // Admin
+            $parentCategories = Category::where('parent_id',0)->get();
+        } else {
+            $parentCategories = Category::where('parent_id',0)->where('created_by',$user_id)->latest()->paginate(10);
+        }
         
         $current_date = date('Y-m-d');    
         // $current_date = "2012-12-07";    
@@ -72,8 +106,11 @@ class FilesController extends Controller
             $total_date_exp = 0;
         }
         // echo $total_date_exp;     
+
+        $tests_navbar = 2;
+        $tests_navbar = "test";
         
-        return view('files.index', compact('files','departments','users','current_date','check_date_exp','total_date_exp'));
+        return view('files.index', compact('files','departments','users','current_date','check_date_exp','total_date_exp', 'parentCategories','tests_navbar','categories'));
         // return view('files.index', compact('files','departments','users','doc_date_exps'));
     }
 
