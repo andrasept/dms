@@ -31,7 +31,7 @@
 
                 @role("HRGA")
                     <div class="mb-3">
-                        <label for="dept_id" class="form-label">Department</label>
+                        <label for="dept_id" class="form-label">*Department</label>
                         <select class="form-control" id="dept_id" name="dept_id" required="required" >
                             <option value="6" selected="selected"> HRGA EHS EXIM IT </option>
                             <option value="15" selected="selected"> All Department </option>
@@ -42,13 +42,44 @@
                     </div>
                 @endrole
 
+                @role("user")
+                    <div class="mb-3">
+                        <label for="dept_id" class="form-label">*Department</label>
+                        <select class="form-control" id="dept_id" name="dept_id" required="required" >
+                            <option value="15" selected="selected"> All Department </option>
+                            @foreach ($departments as $dept)
+                                @if($dept->id == auth()->user()->dept_id)
+                                    <option value="{{ $dept->id }}" >{{ $dept->name}}</option>
+                                @endif                                
+                            @endforeach
+                        </select>
+                    </div>
+                @endrole
+
                 <div class="mb-3">
-                    <label for="doc_number" class="form-label">Nomor Dokumen</label>
+                    <label for="doc_number" class="form-label">*Categories</label>
+                    <select class="form-control" id="category_id" name="category_id" required>        
+                        <option value="" selected="selected"> --Select Categories-- </option>
+                        @foreach($parentCategories as $category)    
+                            <option value="{{$category->id}}"> {{$category->name}} </option>
+                            @if(count($category->subcategory))
+                                @include('categories.subCategoryIndex',['subcategories' => $category->subcategory])
+                            @endif       
+                        @endforeach
+                    </select>
+
+                    @if ($errors->has('category_id'))
+                        <span class="text-danger text-left">{{ $errors->first('category_id') }}</span>
+                    @endif
+                </div>
+
+                <div class="mb-3">
+                    <label for="doc_number" class="form-label">*Nomor Dokumen (MSS/PE-NPD/001)</label>
                     <input value="{{ old('doc_number') }}" 
                         type="text" 
                         class="form-control" 
                         name="doc_number" 
-                        placeholder="format-nomor-surat-001" required>
+                        placeholder="Kode Doc / Kode Dept - Kode Bag / No. Urut" required>
 
                     @if ($errors->has('doc_number'))
                         <span class="text-danger text-left">{{ $errors->first('doc_number') }}</span>
@@ -56,7 +87,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="doc_name" class="form-label">Nama Dokumen</label>
+                    <label for="doc_name" class="form-label">*Nama Dokumen</label>
                     <input value="{{ old('doc_name') }}" 
                         type="text" 
                         class="form-control" 
@@ -69,12 +100,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="doc_date" class="form-label">Tanggal Dokumen</label>
+                    <label for="doc_date" class="form-label">*Tanggal Dokumen</label>
                     <input value="{{ old('doc_date') }}" 
                         type="date" 
                         class="form-control" 
                         name="doc_date" 
-                        placeholder="Tanggal Dokumen">
+                        placeholder="Tanggal Dokumen" required>
 
                     @if ($errors->has('doc_date'))
                         <span class="text-danger text-left">{{ $errors->first('doc_date') }}</span>
@@ -109,9 +140,11 @@
                 </div>  
 
                 <div class="mb-3">
-                    <label for="file" class="form-label">Upload Dokumen</label>
-                    <input type="file" name="file" class="form-control" accept=".jpg,.jpeg,.bmp,.png,.gif,.doc,.docx,.csv,.rtf,.xlsx,.xls,.txt,.pdf,.zip">
+                    <label for="file" class="form-label">*Upload Dokumen</label>
+                    <input type="file" name="file" class="form-control">
                 </div>
+                <br/>
+                <i>* Mandatory Field</i>
                 <br/><br/>       
 
                 <button type="submit" class="btn btn-primary">Save</button>

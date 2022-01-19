@@ -18,7 +18,7 @@
                 <tr>
                     <th>No</th>
                     <th>Name</th>
-                    <th>Parent</th>
+                    <!-- <th>Parent</th> -->
                     <th>Action</th>
                 </tr>
             </thead>
@@ -27,7 +27,7 @@
                 <tr>
                     <td>{{ $loop->iteration + (($categories->currentPage() -1) * $categories->perPage())  }}</td>
                     <td>{{ $category->name }}</td>
-                    <td>{{ $category->parent_id }}</td>
+                    <!-- <td>{{ $category->parent_id }}</td> -->
                     <td>
                         <!-- <a class="btn btn-info btn-sm" href="{{ route('categories.show', $category->id) }}">Show</a> -->
                     

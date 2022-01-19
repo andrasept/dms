@@ -20,7 +20,7 @@
             <div class="accordion-body">
               @foreach ($files as $key => $file)
 
-                @if($file->doc_date || $file->doc_date_exp)
+                @if($file->doc_date_exp)
                   <?php
                   $date_exp = $file->doc_date_exp;
                   $orderdate=$date_exp;
@@ -62,17 +62,20 @@
     <br/><br/>
     <div class="mb-3">
       <label for="category_id" class="label">Categories :</label>
-      <select class="" id="category_id" name="category_id" required="required" >        
-        <option value="" selected="selected"> Select Categories </option>
-        @foreach($parentCategories as $category)    
-          <option value="{{$category->id}}"> {{$category->name}} </option>
 
-          @if(count($category->subcategory))
-            @include('categories.subCategoryIndex',['subcategories' => $category->subcategory])
-          @endif
-       
-        @endforeach
-      </select>
+      <form action="">
+        <select class="" id="category_id" name="category_id">        
+          <option value="" selected="selected"> All Categories </option>
+          @foreach($parentCategories as $category)   
+            <option value="{{$category->id}}"> {{$category->name}} </option>
+            @if(count($category->subcategory))
+              @include('categories.subCategoryIndex',['subcategories' => $category->subcategory])
+            @endif       
+          @endforeach
+        </select>
+        <input type="submit" class="btn btn-sm btn-primary" value="Search"/>
+      </form>
+
     </div>
   </div>
 
@@ -111,6 +114,7 @@
           @foreach ($categories as $key3 => $cat)
             @if ($file->category_id == $cat->id)
               <span class="badge" style="color:#333; font-size: 14px;">{{ $cat->name }}</span>
+              @break
             @endif
           @endforeach
 

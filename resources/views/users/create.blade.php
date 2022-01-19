@@ -11,7 +11,7 @@
             <form method="POST" action="">
                 @csrf
                 <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
+                    <label for="name" class="form-label">PIC Name</label>
                     <input value="{{ old('name') }}" 
                         type="text" 
                         class="form-control" 
