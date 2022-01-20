@@ -14,6 +14,8 @@ use Carbon\Carbon;
 
 use Illuminate\Database\Query\Builder;
 
+use Illuminate\Validation\Validator;
+
 class FilesController extends Controller
 {
     /**
@@ -258,6 +260,13 @@ class FilesController extends Controller
         $doc_date = $request->input('doc_date');  
         $doc_date_exp = $request->input('doc_date_exp');  
         $doc_note = $request->input('doc_note');  
+
+        // $validatedData = $request->validate([
+        //  'file' => 'required|csv,txt,xlx,xls,xlsx,doc,docx,pdf,ppt,pptx,tif',
+        // ]);
+        $request->validate([
+            'file' => 'required|mimes:jpg,jpeg,bmp,png,doc,docx,csv,rtf,xlsx,xls,txt,pdf,zip,ppt,pptx,tif'
+        ]);
 
         $doc_type = $request->file->getClientMimeType();
         $doc_size = $request->file->getSize();

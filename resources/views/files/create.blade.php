@@ -142,6 +142,9 @@
                 <div class="mb-3">
                     <label for="file" class="form-label">*Upload Dokumen</label>
                     <input type="file" name="file" class="form-control">
+                    @error('file')
+                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                    @enderror
                 </div>
                 <br/>
                 <i>* Mandatory Field</i>
