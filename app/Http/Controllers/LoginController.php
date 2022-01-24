@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Login\RememberMeExpiration;
+use Carbon\Carbon;
+use App\Models\Log;
+// use App\Http\Controllers\Log;
 
 class LoginController extends Controller
 {
@@ -58,6 +61,13 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user) 
     {
+        // get and insert log history
+        Log::create([
+            'user_id' => $user->id,
+            'last_login_at' => Carbon::now()->toDateTimeString(),
+            'last_login_ip' => $request->getClientIp()
+        ]);
+
         return redirect()->intended();
     }
 }

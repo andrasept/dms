@@ -115,6 +115,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
             Route::patch('/{post}/update', 'FilesController@update')->name('files.update');
             Route::delete('/{post}/delete', 'FilesController@destroy')->name('files.destroy');
 
+            Route::get('/download', 'FilesController@download')->name('files.download');
+            Route::get('/{post}/downloadfile', 'FilesController@downloadfile')->name('files.downloadfile');
+
             // Route::get('/files', 'FilesController@index')->name('files.index');
             // Route::get('/files/add', 'FilesController@create')->name('files.create');
             // Route::post('/files/add', 'FilesController@store')->name('files.store');
@@ -133,6 +136,19 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
             Route::get('/{post}/edit', 'CategoryController@edit')->name('categories.edit');
             Route::patch('/{post}/update', 'CategoryController@update')->name('categories.update');
             Route::delete('/{post}/delete', 'CategoryController@destroy')->name('categories.destroy');
+        });
+
+        /**
+         * User Routes
+         */
+        Route::group(['prefix' => 'logs'], function() {
+            Route::get('/', 'LogController@index')->name('logs.index');
+            Route::get('/create', 'LogController@create')->name('logs.create');
+            Route::post('/create', 'LogController@store')->name('logs.store');
+            Route::get('/{user}/show', 'LogController@show')->name('logs.show');
+            Route::get('/{user}/edit', 'LogController@edit')->name('logs.edit');
+            Route::patch('/{user}/update', 'LogController@update')->name('logs.update');
+            Route::delete('/{user}/delete', 'LogController@destroy')->name('logs.destroy');
         });
         
     });

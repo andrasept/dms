@@ -11,6 +11,7 @@ use Illuminate\Http\UploadedFile;
 use App\Http\Requests\StoreFileRequest;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Log;
 
 use Illuminate\Database\Query\Builder;
 
@@ -335,9 +336,22 @@ class FilesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    // public function destroy($id)
+    public function destroy(Request $request, $id)
     // public function destroy(File $file)
     {
+        // echo $id; exit();
+
+        // get deleted by and insert into log history
+        // code...
+        Log::create([
+            'user_id' => auth()->user()->id,
+            'last_login_at' => Carbon::now()->toDateTimeString(),
+            'last_login_ip' => $request->getClientIp(),
+            'last_delete_file_at' => Carbon::now()->toDateTimeString(),
+            'last_delete_file_id' => $id,
+        ]);
+
         // DB::enableQueryLog();
 
         // $file->delete();
@@ -352,8 +366,51 @@ class FilesController extends Controller
         // update kolom deleted_by dengan auth->id
 
         $file->delete();
+
+
         return redirect()->route('files.index')
             ->withSuccess(__('File deleted successfully.'));
 
     }
+
+    public function download()
+    {
+        
+    }
+
+    public function downloadfile(Request $request, $id)
+    {
+        // echo $id; exit();
+
+        // get download by/file id and insert into log history
+        // code...
+        Log::create([
+            'user_id' => auth()->user()->id,
+            'last_login_at' => Carbon::now()->toDateTimeString(),
+            'last_login_ip' => $request->getClientIp(),
+            'last_download_file_at' => Carbon::now()->toDateTimeString(),
+            'last_download_file_id' => $id,
+        ]);
+
+        // DB::enableQueryLog();
+
+        $files = File::where('id',$id)->first();
+
+        // $query = DB::getQueryLog();
+        // dd($query); exit();
+
+        // echo $files->doc_name; exit();
+
+        $filePath = public_path("file/".$files->doc_name);
+        // echo $filePath; exit();
+
+        // $headers = ['Content-Type: application/pdf'];
+        $headers = ['Content-Type: '.$files->doc_type];
+
+        $fileName = $files->doc_name;
+
+        return response()->download($filePath, $fileName, $headers);
+    }
+
+
 }

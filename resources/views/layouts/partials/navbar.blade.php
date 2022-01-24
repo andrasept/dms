@@ -25,6 +25,7 @@
             </ul>
           </li>          
           <li><a href="{{ route('files.index') }}" class="nav-link px-2 text-white">Files</a></li>
+          <li><a href="{{ route('logs.index') }}" class="nav-link px-2 text-white">Logs</a></li>
           @endrole
 
           <!-- <li><a href="{{ route('posts.index') }}" class="nav-link px-2 text-white">Posts</a></li> -->

@@ -135,7 +135,8 @@
         </td>
         <td>{{ $file->created_at }}</td>
         <td>
-          <a href="{{url('')}}/file/{{ $file->doc_name }}" target="_newtab">Download</a>
+          <!-- <a href="{{url('')}}/file/{{ $file->doc_name }}" target="_newtab">Download</a> -->
+          <a href="{{url('')}}/files/{{$file->id}}/downloadfile" target="_newtab">Download</a>
           <br/><br/><br/>
           {!! Form::open(['method' => 'DELETE','route' => ['files.destroy', $file->id],'style'=>'display:inline']) !!}
           {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm', 'onclick' => 'return confirm("Are you sure?")']) !!}
