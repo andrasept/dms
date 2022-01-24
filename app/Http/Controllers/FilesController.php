@@ -256,7 +256,8 @@ class FilesController extends Controller
         $dept_id = $request->input('dept_id');
         $category_id = $request->input('category_id');
 
-        $doc_name = $request->input('doc_name') . '_' . time() . '.'. $request->file->extension();  
+        // $doc_name = $request->input('doc_name') . '_' . time() . '.'. $request->file->extension();  
+        $doc_name = $request->input('doc_name') . '.' . $request->file->extension();  
         $doc_number = $request->input('doc_number');  
         $doc_date = $request->input('doc_date');  
         $doc_date_exp = $request->input('doc_date_exp');  

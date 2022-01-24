@@ -18,11 +18,20 @@ class LogController extends Controller
     {
         $logs = Log::latest()->paginate(10);
         $users = User::all();
-        $files = File::all();
+        $file_gets = File::all();
+        $files = File::latest();
+        $file_trasheds = $files->onlyTrashed()->get();
         // $files = File::withTrashed();
         // $file_trasheds = File::withTrashed();
 
-        return view('logs.index', compact('logs','users','files'));
+        // dd($file_trasheds); exit();
+        // echo $file_trasheds->id;
+        // foreach($file_trasheds as $f){
+        //     echo $f->id."test";
+        // }
+        // exit();
+
+        return view('logs.index', compact('logs','users','files','file_trasheds','file_gets'));
     }
 
     /**

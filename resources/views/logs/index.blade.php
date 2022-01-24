@@ -40,20 +40,21 @@
                     <td>{{ $log->last_login_ip }}</td>
                     <td>{{ $log->last_download_file_at }}</td>
                     <td>
-                    @foreach($files as $file)
+                    <!-- {{$log->last_download_file_id}} -->
+                    @foreach($file_gets as $file)
                         @if($file->id == $log->last_download_file_id)
                             {{ $file->doc_name }}
                         @endif
                     @endforeach
                     </td>                
                     <td>{{ $log->last_delete_file_at }}</td>
-                    <td>{{ $log->last_delete_file_id }}
-                    @foreach($files as $file)
-                    <!-- {{$file->id}} -->
-                        @if(($file->id == $log->last_delete_file_id) && ($file->deleted_at != NULL))
-                            {{ $file->doc_name }}
-                        @endif
-                    @endforeach
+                    <td>
+                        <!-- {{ $log->last_delete_file_id }} -->
+                        @foreach($file_trasheds as $filet)
+                            @if($filet->id == $log->last_delete_file_id)
+                                {{ $filet->doc_name }}
+                            @endif
+                        @endforeach
                     </td>
                 </tr>
                 @endforeach

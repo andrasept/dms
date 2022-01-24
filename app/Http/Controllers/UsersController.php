@@ -32,6 +32,7 @@ class UsersController extends Controller
         $users = User::latest();
         if($request->get('status') == 'archived') {
             $users = $users->onlyTrashed();
+            // $users = $users->withTrashed();
         }
         $users = $users->paginate(10);
         return view('users.index', compact('users'));
