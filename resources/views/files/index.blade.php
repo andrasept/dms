@@ -18,11 +18,12 @@
           </h2>
           <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
             <div class="accordion-body">
-              @foreach ($files as $key => $file)
+              @foreach ($files_exp as $key => $file)
 
                 @if($file->doc_date_exp)
                   <?php
                   $date_exp = $file->doc_date_exp;
+                  // echo $date_exp."<br/>";
                   $orderdate=$date_exp;
                   $orderdate = explode('-', $orderdate);
                   $day   = $orderdate[2];
@@ -31,7 +32,8 @@
 
                   $date_exp = Carbon\Carbon::create($year, $month, $day, 0);
                   // expire date
-                  // echo $date_exp."<br/>"; 
+                  // echo $date_exp."<br/>"; // sampai sini udah benar exp date nya
+
                   // 1 month to expired
                   $date_exp_2mo = $date_exp->subMonth(2);
                   // echo $date_exp_2mo."<br/>"; 
@@ -43,9 +45,10 @@
                     // echo " masuk ke masa tenggang expired di ".$date_exp."<br/>";
                     echo $file->doc_name;
                     // echo " expired di ".$date_exp."<br/>"; 
-                    $originalDate = $date_exp;
+                    $originalDate = $date_exp->addMonth(2);
                     $newDate = date("Y-m-d", strtotime($originalDate));                       
-                    echo " expired di ".$newDate."<br/>";                        
+                    echo " expired di ".$newDate."<br/>";                          
+                    // echo " expired di ".$date_exp."<br/>";                          
                   } 
                 ?>
                 @endif

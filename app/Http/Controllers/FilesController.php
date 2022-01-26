@@ -79,9 +79,16 @@ class FilesController extends Controller
                 })
                 ->paginate(10);
                 $files->appends(['category_id' => $category_id]);
+
+                // expired docs
+                $files_exp = File::where(function ($query) use ($category_id){
+                    $query->where('category_id', $category_id);
+                })->get();
             }
             else{
                 $files = File::paginate(10);
+                // expired docs
+                $files_exp = File::all();
             }
             // files filter end
         } else {
@@ -130,19 +137,31 @@ class FilesController extends Controller
                 // $files = $files_query->paginate(10);
                 // $files->appends(['category_id' => $category_id]);
 
-                $files = DB::table('files')
-                ->selectRaw('files.*')
+                // $files = DB::table('files')
+                // ->selectRaw('files.*')
+                $files = File::selectRaw('files.*')
                 ->join('users', 'files.created_by', 'users.id')
                 ->join('departments', 'files.dept_id', 'departments.id')
                 ->whereRaw('(files.created_by = '.$user_id.' OR files.created_by = 4) AND (files.dept_id = '.$dept_id.' OR files.dept_id = 15) AND files.category_id = '.$category_id)
                 ->paginate(10);
                 $files->appends(['category_id' => $category_id]);
 
+                // expired docs
+                // $files_exp = DB::table('files')
+                // ->selectRaw('files.*')
+                $files_exp = File::selectRaw('files.*')
+                ->join('users', 'files.created_by', 'users.id')
+                ->join('departments', 'files.dept_id', 'departments.id')
+                ->whereRaw('(files.created_by = '.$user_id.' OR files.created_by = 4) AND (files.dept_id = '.$dept_id.' OR files.dept_id = 15) AND files.category_id = '.$category_id)
+                ->get();
+
                 // $query = DB::getQueryLog();
                 // dd($query); exit();
             }
             else{
                 $files = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->paginate(10);
+                // expired docs
+                $files_exp = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->get();
             }
             // files filter end
 
@@ -152,7 +171,8 @@ class FilesController extends Controller
         if ($dept_id == 0) { // Admin
             $parentCategories = Category::where('parent_id',0)->get();
         } else {
-            $parentCategories = Category::where('parent_id',0)->where('created_by',$user_id)->latest()->paginate(10);
+            // $parentCategories = Category::where('parent_id',0)->where('created_by',$user_id)->latest()->paginate(10);
+            $parentCategories = Category::where('parent_id',0)->where('created_by',$user_id)->get();
         }
         
         $current_date = date('Y-m-d');    
@@ -160,8 +180,7 @@ class FilesController extends Controller
 
         $check_date_exp = 0;
         $i = 0;
-        foreach ($files as $f) {  
-
+        foreach ($files_exp as $f) {  
             // if ($f->doc_date_exp || $f->doc_date) {
             if ($f->doc_date_exp) {
                 // echo $date_exp->doc_date_exp."<br/>";
@@ -198,12 +217,12 @@ class FilesController extends Controller
         } else {
             $total_date_exp = 0;
         }
-        // echo $total_date_exp;     
+        // echo $total_date_exp; exit();
 
         $tests_navbar = 2;
         $tests_navbar = "test";
         
-        return view('files.index', compact('files','departments','users','current_date','check_date_exp','total_date_exp', 'parentCategories','tests_navbar','categories'));
+        return view('files.index', compact('files','departments','users','current_date','check_date_exp','total_date_exp', 'parentCategories','tests_navbar','categories','files_exp'));
         // return view('files.index', compact('files','departments','users','doc_date_exps'));
     }
 
@@ -267,7 +286,7 @@ class FilesController extends Controller
         //  'file' => 'required|csv,txt,xlx,xls,xlsx,doc,docx,pdf,ppt,pptx,tif',
         // ]);
         $request->validate([
-            'file' => 'required|mimes:jpg,jpeg,bmp,png,doc,docx,csv,rtf,xlsx,xls,txt,pdf,zip,ppt,pptx,tif'
+            'file' => 'required|mimes:jpg,jpeg,bmp,png,doc,docx,csv,rtf,xlsx,xls,txt,pdf,zip,ppt,pptx,tif|max:20480'
         ]);
 
         $doc_type = $request->file->getClientMimeType();
