@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="bg-light p-4 rounded">
-  <h2>Upload Documents</h2>
+  <h2>All Departments.</h2>
   <div class="lead">
     <br/>
     Documents management.
@@ -11,11 +11,11 @@
     @if($check_date_exp > 0)
       <div class="accordion accordion-flush text-danger" id="accordionFlushExample">
         <div class="accordion-item">
-          <h2 class="accordion-header text-danger" id="flush-headingOne">
+          <!-- <h2 class="accordion-header text-danger" id="flush-headingOne">
             <button class="accordion-button collapsed text-danger" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
               There are <b> ({{$total_date_exp}}) </b> documents expiring soon.
             </button>
-          </h2>
+          </h2> -->
           <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
             <div class="accordion-body">
               @foreach ($files_exp as $key => $file)
@@ -43,11 +43,11 @@
                   if (($current_date >= $date_exp_2mo) || ($current_date >= $date_exp)) {
                     // echo $file->doc_name;
                     // echo " masuk ke masa tenggang expired di ".$date_exp."<br/>";
-                    echo $file->doc_name;
+                      // echo $file->doc_name;
                     // echo " expired di ".$date_exp."<br/>"; 
                     $originalDate = $date_exp->addMonth(2);
                     $newDate = date("Y-m-d", strtotime($originalDate));                       
-                    echo " expired di ".$newDate."<br/>";                          
+                      // echo " expired di ".$newDate."<br/>";                          
                     // echo " expired di ".$date_exp."<br/>";                          
                   } 
                 ?>
@@ -64,18 +64,13 @@
     <a href="{{ route('files.create') }}" class="btn btn-primary btn-sm float-left">Add Document</a>
     <br/><br/>
     <div class="mb-3">
-      <label for="category_id" class="label">Categories :</label>
+      <label for="category_id" class="label">Filter Search :</label>
 
       <form action="">
         <select class="" id="category_id" name="category_id">        
-          <option value="" selected="selected"> All Categories </option>
-          @foreach($parentCategories as $category)   
-            <option value="{{$category->id}}"> {{$category->name}} </option>
-            @if(count($category->subcategory))
-              @include('categories.subCategoryIndex',['subcategories' => $category->subcategory])
-            @endif       
-          @endforeach
+          <option value="" selected="selected"> Filter </option>          
         </select>
+        <input type="text" />
         <input type="submit" class="btn btn-sm btn-primary" value="Search"/>
       </form>
 
@@ -108,9 +103,18 @@
       <tr>
         <td>{{ $loop->iteration + (($files->currentPage() -1) * $files->perPage())  }}</td>
         <td>
-          @foreach ($departments as $key2 => $dept)
-            @if ($file->dept_id == $dept->id)
-              {{ $dept->name }}<br/>
+
+          @foreach ($users as $key3 => $user)
+            @if ($file->created_by == $user->id)
+              <!-- {{ $user->dept_id }} -->
+              @foreach ($departments as $key2 => $dept)
+                @if ($user->dept_id == $dept->id)
+                  {{$dept->name}}<br/>
+                @elseif ($user->dept_id == 0)
+                  ALL DEPARTMENT<br/>
+                  @break
+                @endif
+              @endforeach
             @endif
           @endforeach
 
@@ -167,6 +171,10 @@
   $(document).ready(function() {
     $('#datatable').DataTable({
         // "pageLength": 2
+        "searching": false,
+        "info": true,         // Will show "1 to n of n entries" Text at bottom
+        "lengthChange": false, // Will Disabled Record number per page
+        "paging": false
       });
   } );
 </script>

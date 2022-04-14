@@ -432,5 +432,149 @@ class FilesController extends Controller
         return response()->download($filePath, $fileName, $headers);
     }
 
+    public function alldept(Request $request)
+    {
+        $departments = Department::all();
+        $users = User::all();
+        $user_id = auth()->user()->id;
+        $dept_id = auth()->user()->dept_id;
+
+        if ($dept_id == 0) { // jika admin Login
+            $user_id = auth()->user()->id;
+            $dept_id = auth()->user()->dept_id;
+            // $files = File::latest()->paginate(10);
+            $categories = Category::all();
+            // files filter
+            $category_id = $request->input('category_id');
+            if($category_id!=""){
+                $files = File::where(function ($query) use ($category_id){
+                    $query->where('category_id', $category_id);
+                })
+                ->paginate(10);
+                $files->appends(['category_id' => $category_id]);
+
+                // expired docs
+                $files_exp = File::where(function ($query) use ($category_id){
+                    $query->where('category_id', $category_id);
+                })->get();
+            }
+            else{
+                $files = File::paginate(10);
+                // expired docs
+                $files_exp = File::all();
+            }
+            // files filter end
+        } else {
+            $user_id = auth()->user()->id;
+            $dept_id = auth()->user()->dept_id;
+            // $files = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->paginate(10);
+            // $categories = Category::where('created_by',$user_id)->orWhere('category_id',$category_id)->get();
+            $categories = DB::table('files')
+                ->join('categories', 'files.category_id', '=', 'categories.id')
+                ->join('users', 'categories.created_by', '=', 'users.id')
+                ->select('categories.id', 'categories.name')
+                ->get();
+            // select `categories`.`id`, `categories`.`name` from `files`, `categories`, `users` where `files`.`category_id` = `categories`.`id` AND `categories`.`created_by` = `users`.`id` GROUP by categories.id 
+            // $categories = DB::select()
+
+            // files filter
+            $category_id = $request->input('category_id');
+            if($category_id !=""){
+                $files = File::selectRaw('files.*')
+                ->join('users', 'files.created_by', 'users.id')
+                ->join('departments', 'files.dept_id', 'departments.id')
+                ->whereRaw('(files.created_by = '.$user_id.' OR files.created_by = 4) AND (files.dept_id = '.$dept_id.' OR files.dept_id = 15) AND files.category_id = '.$category_id)
+                ->paginate(10);
+                $files->appends(['category_id' => $category_id]);
+
+                // user dept   
+                $file_depts = File::selectRaw('files.*')
+                ->join('users', 'files.created_by', 'users.id')
+                ->join('departments', 'files.dept_id', 'departments.id')
+                ->whereRaw('(files.created_by = '.$user_id.' OR files.created_by = 4) AND (files.dept_id = '.$dept_id.' OR files.dept_id = 15) AND files.category_id = '.$category_id)
+                ->paginate(10);         
+                // user dept end
+
+                // expired docs
+                // $files_exp = DB::table('files')
+                // ->selectRaw('files.*')
+                $files_exp = File::selectRaw('files.*')
+                ->join('users', 'files.created_by', 'users.id')
+                ->join('departments', 'files.dept_id', 'departments.id')
+                ->whereRaw('(files.created_by = '.$user_id.' OR files.created_by = 4) AND (files.dept_id = '.$dept_id.' OR files.dept_id = 15) AND files.category_id = '.$category_id)
+                ->get();
+
+                // $query = DB::getQueryLog();
+                // dd($query); exit();
+            }
+            else{
+                // $files = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->paginate(10);
+                $files = File::where('dept_id',15)->paginate(10);
+                // expired docs
+                $files_exp = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->get();
+            }
+            // files filter end            
+
+        }        
+        // $categories = Category::all();
+        // $parentCategories = Category::where('parent_id',0)->get();
+        if ($dept_id == 0) { // Admin
+            $parentCategories = Category::where('parent_id',0)->get();
+        } else {
+            // $parentCategories = Category::where('parent_id',0)->where('created_by',$user_id)->latest()->paginate(10);
+            $parentCategories = Category::where('parent_id',0)->where('created_by',$user_id)->get();
+        }
+        
+        $current_date = date('Y-m-d');    
+        // $current_date = "2012-12-07";    
+
+        $check_date_exp = 0;
+        $i = 0;
+        foreach ($files_exp as $f) {  
+            // if ($f->doc_date_exp || $f->doc_date) {
+            if ($f->doc_date_exp) {
+                // echo $date_exp->doc_date_exp."<br/>";
+                $date_exp = $f->doc_date_exp;
+                $orderdate=$date_exp;
+                $orderdate = explode('-', $orderdate);
+                $day   = $orderdate[2];
+                $month = $orderdate[1];
+                $year  = $orderdate[0];
+
+                $date_exp = Carbon::create($year, $month, $day, 0);
+                // expire date
+                // echo $date_exp."<br/>"; 
+                // 1 month to expired
+                $date_exp_2mo = $date_exp->subMonth(2);
+                // echo $date_exp_2mo."<br/>"; 
+                // if curr_date >= 2-mo-to-exp && curr_date <= date_exp
+                // if (($current_date >= $date_exp_2mo) && ($current_date <= $date_exp)) {
+                if (($current_date >= $date_exp_2mo) || ($current_date >= $date_exp)) {
+                    $i++;
+                    // echo $f->doc_name;
+                    // echo " masuk ke masa tenggang expired di ".$date_exp."<br/><br/>";
+                    $check_date_exp=1;
+                    // echo $i."<br/>";
+                }
+            }            
+
+            // LANJUT MASUKKAN NOTIF NYA (ATAU LOGIC NYA) KE BLADE
+        }
+        // echo $i;
+
+        if ($i>0) {
+            $total_date_exp = $i; 
+        } else {
+            $total_date_exp = 0;
+        }
+        // echo $total_date_exp; exit();
+
+        $tests_navbar = 2;
+        $tests_navbar = "test";
+        
+        return view('files.alldept', compact('files','departments','users','current_date','check_date_exp','total_date_exp', 'parentCategories','tests_navbar','categories','files_exp','user_id'));
+        // return view('files.index', compact('files','departments','users','doc_date_exps'));
+    }
+
 
 }

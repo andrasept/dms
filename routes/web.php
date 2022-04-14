@@ -118,6 +118,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
             Route::get('/download', 'FilesController@download')->name('files.download');
             Route::get('/{post}/downloadfile', 'FilesController@downloadfile')->name('files.downloadfile');
 
+            Route::get('/alldept', 'FilesController@alldept')->name('files.alldept');
+
             // Route::get('/files', 'FilesController@index')->name('files.index');
             // Route::get('/files/add', 'FilesController@create')->name('files.create');
             // Route::post('/files/add', 'FilesController@store')->name('files.store');

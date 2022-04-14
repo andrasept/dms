@@ -23,8 +23,14 @@
             <ul class="dropdown-menu">
               <li><a href="{{ route('departments.index') }}" class="dropdown-item">Departments</a></li>
             </ul>
-          </li>          
-          <li><a href="{{ route('files.index') }}" class="nav-link px-2 text-white">Files</a></li>
+          </li>
+          <li class="nav-item px-2 text-white dropdown" id="myDropdown">
+            <a class="nav-link text-white dropdown-toggle" href="#" data-bs-toggle="dropdown">Files</a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ route('files.index') }}" class="dropdown-item">Files</a></li>
+              <li><a href="{{ route('files.alldept') }}" class="dropdown-item">Files All Dept</a></li>
+            </ul>            
+          </li>
           <li><a href="{{ route('logs.index') }}" class="nav-link px-2 text-white">Logs</a></li>
           @endrole
 
@@ -41,7 +47,13 @@
             <li><a href="{{ route('categories.index') }}" class="nav-link px-2 text-white">Categories</a></li>
           @endrole
           @role('user')
-            <li><a href="{{ route('files.index') }}" class="nav-link px-2 text-white">Files</a></li>
+            <li class="nav-item px-2 text-white dropdown" id="myDropdown">
+              <a class="nav-link text-white dropdown-toggle" href="#" data-bs-toggle="dropdown">Files</a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ route('files.index') }}" class="dropdown-item">Files</a></li>
+                <li><a href="{{ route('files.alldept') }}" class="dropdown-item">Files All Dept</a></li>
+              </ul>            
+            </li>
             <li><a href="{{ route('categories.index') }}" class="nav-link px-2 text-white">Categories</a></li>
           @endrole
         @endauth

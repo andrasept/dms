@@ -110,7 +110,7 @@ class CategoryController extends Controller
     // public function edit($id)
     public function edit(Category $category)
     {
-        echo "edit";
+        // echo "edit";
     }
 
     /**
@@ -133,6 +133,15 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $cat = Category::find($id);
+        
+        // deleted by
+        // update kolom deleted_by dengan auth->id
+
+        $cat->delete();
+
+
+        return redirect()->route('categories.index')
+            ->withSuccess(__('Category deleted successfully.'));
     }
 }
