@@ -3,11 +3,13 @@
 @section('content')
 
 <div class="bg-light p-4 rounded">
-  <h2>Upload Documents</h2>
-  <div class="lead">
-    <br/>
-    Documents management.
-    <!-- cek jika ada dokumen yang expired -->
+  @foreach ($departments as $key2 => $dept)
+    @if ($dept_id == $dept->id)      
+      <h2>{{ $dept->code }} Documents</h2>
+    @endif
+  @endforeach
+  <div class="lead">       
+    <!-- cek jika ada dokumen yang expired -->    
     @if($check_date_exp > 0)
       <div class="accordion accordion-flush text-danger" id="accordionFlushExample">
         <div class="accordion-item">
@@ -23,6 +25,9 @@
                 @if($file->doc_date_exp)
                   <?php
                   $date_exp = $file->doc_date_exp;
+                  $date_exp_n = date_create($date_exp);
+                  $date_exp_n = date_format($date_exp_n,"Y-m-d");
+                  // echo $date_exp_n;
                   // echo $date_exp."<br/>";
                   $orderdate=$date_exp;
                   $orderdate = explode('-', $orderdate);
@@ -43,12 +48,13 @@
                   if (($current_date >= $date_exp_2mo) || ($current_date >= $date_exp)) {
                     // echo $file->doc_name;
                     // echo " masuk ke masa tenggang expired di ".$date_exp."<br/>";
-                    echo $file->doc_name;
+                      echo $file->doc_name;
                     // echo " expired di ".$date_exp."<br/>"; 
                     $originalDate = $date_exp->addMonth(2);
                     $newDate = date("Y-m-d", strtotime($originalDate));                       
-                    echo " expired di ".$newDate."<br/>";                          
-                    // echo " expired di ".$date_exp."<br/>";                          
+                      // echo " expired di ".$newDate."<br/>";                          
+                      // echo " expired di ".$date_exp."<br/>";                          
+                      echo " expired di ".$date_exp_n."<br/>";                          
                   } 
                 ?>
                 @endif

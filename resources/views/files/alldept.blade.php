@@ -3,10 +3,8 @@
 @section('content')
 
 <div class="bg-light p-4 rounded">
-  <h2>All Departments.</h2>
+  <h2>All Departments</h2>
   <div class="lead">
-    <br/>
-    Documents management.
     <!-- cek jika ada dokumen yang expired -->
     @if($check_date_exp > 0)
       <div class="accordion accordion-flush text-danger" id="accordionFlushExample">
@@ -145,9 +143,6 @@
           <!-- <a href="{{url('')}}/file/{{ $file->doc_name }}" target="_newtab">Download</a> -->
           <a href="{{url('')}}/files/{{$file->id}}/downloadfile" target="_newtab">Download</a>
           <br/><br/><br/>
-          {!! Form::open(['method' => 'DELETE','route' => ['files.destroy', $file->id],'style'=>'display:inline']) !!}
-          {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm', 'onclick' => 'return confirm("Are you sure?")']) !!}
-          {!! Form::close() !!}
         </td>
       </tr>
       @endforeach

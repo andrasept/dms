@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Log;
 
+use Mail;
+use App\Mail\ReminderMail;
+
 use Illuminate\Database\Query\Builder;
 
 use Illuminate\Validation\Validator;
@@ -91,7 +94,7 @@ class FilesController extends Controller
                 $files_exp = File::all();
             }
             // files filter end
-        } else {
+        } else { // jika user login
             $user_id = auth()->user()->id;
             $dept_id = auth()->user()->dept_id;
             // $files = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->paginate(10);
@@ -107,6 +110,7 @@ class FilesController extends Controller
             // files filter
             $category_id = $request->input('category_id');
             if($category_id!=""){
+                // echo "cat not null"; exit();
                 // DB::enableQueryLog();
 
                 // if (condition) {
@@ -143,6 +147,7 @@ class FilesController extends Controller
                 ->join('users', 'files.created_by', 'users.id')
                 ->join('departments', 'files.dept_id', 'departments.id')
                 ->whereRaw('(files.created_by = '.$user_id.' OR files.created_by = 4) AND (files.dept_id = '.$dept_id.' OR files.dept_id = 15) AND files.category_id = '.$category_id)
+                ->orderBy('files.doc_date','DESC')
                 ->paginate(10);
                 $files->appends(['category_id' => $category_id]);
 
@@ -159,7 +164,10 @@ class FilesController extends Controller
                 // dd($query); exit();
             }
             else{
-                $files = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->paginate(10);
+                // echo "cat null"; exit();
+                $files = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)
+                    ->orderBy('doc_date','DESC')
+                    ->paginate(10);
                 // expired docs
                 $files_exp = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->get();
             }
@@ -219,10 +227,35 @@ class FilesController extends Controller
         }
         // echo $total_date_exp; exit();
 
+        // send email reminder
+        // $details="";
+        if ($total_date_exp > 0) {
+            // echo "send email"; exit();
+            $user_email = DB::table('users')->where('id', $user_id)->pluck('email');
+            $user_name = DB::table('users')->where('id', $user_id)->pluck('name');
+            $data_mail = array(
+                'name' => "AJI DMS",
+                'content' => "Content Document Expired",
+                'email' => $user_email,
+                'email_name' => $user_name
+            );
+
+            // reminder 2 bulan sebelum expired
+            // TODO
+            // reminder 2 bulan sebelum expired end
+
+            $details = [
+                'title' => 'Expired Documents',
+                'body' => 'Document berikut akan segera expire :'
+            ];
+            Mail::to($user_email)->send(new \App\Mail\ReminderMail($details));
+        }
+        // send email reminder end
+
         $tests_navbar = 2;
         $tests_navbar = "test";
         
-        return view('files.index', compact('files','departments','users','current_date','check_date_exp','total_date_exp', 'parentCategories','tests_navbar','categories','files_exp'));
+        return view('files.index', compact('files','departments','users','current_date','check_date_exp','total_date_exp', 'parentCategories','tests_navbar','categories','files_exp','dept_id'));
         // return view('files.index', compact('files','departments','users','doc_date_exps'));
     }
 
@@ -509,7 +542,7 @@ class FilesController extends Controller
             }
             else{
                 // $files = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->paginate(10);
-                $files = File::where('dept_id',15)->paginate(10);
+                $files = File::where('dept_id',15)->orderBy('doc_date', 'DESC')->paginate(10);
                 // expired docs
                 $files_exp = File::where('created_by',$user_id)->orWhere('dept_id',$dept_id)->get();
             }
