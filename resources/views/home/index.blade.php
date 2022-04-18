@@ -1,15 +1,65 @@
 @extends('layouts.app-master')
 
-@section('content')
-    <div class="bg-light p-4 rounded">
-        @auth
-        <h1>Dashboard</h1>
-        <p class="lead">Only authenticated users can access this section.</p>
-        @endauth
+@section('title', 'AJI MIS | HOME')
 
-        @guest
-        <h1>Homepage</h1>
-        <p class="lead">Your viewing the home page. Please login to view the restricted data.</p>
-        @endguest
+@section('content')
+  @guest
+  <div class="ibox-content">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="ibox">
+          <div class="ibox-content product-box">
+            <div class="product-imitation">
+              <img src="{{asset('image/award.png')}}" alt="" width="40%" height="40%">
+            </div>
+            <div class="product-desc">
+              <span class="product-price bg-danger">
+                QUALITY
+              </span>
+              <div class="small m-t-xs">
+                Quality Portal
+              </div>
+              <div class="m-t text-righ">
+                @role('quality')
+                <a href="#" class="btn btn-xs btn-outline btn-primary">Go <i class="fa fa-long-arrow-right"></i> </a>
+                @else
+                <a href="#" class="btn btn-xs btn-outline btn-danger" style="cursor: not-allowed;pointer-events: none;">Not Allowed</a>
+                @endrole
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="ibox">
+          <div class="ibox-content product-box">
+            <div class="product-imitation">
+              <img src="{{asset('image/analytics.png')}}" alt="" width="40%" height="40%">
+            </div>
+            <div class="product-desc">
+              <span class="product-price " style="background-color:black">
+                DMS
+              </span>
+              <div class="small m-t-xs">
+                Document Management System
+              </div>
+              <div class="m-t text-righ">
+                @role('npd')
+                <a href="#" class="btn btn-xs btn-outline btn-primary">Go <i class="fa fa-long-arrow-right"></i> </a>
+                @else
+                <a href="#" class="btn btn-xs btn-outline btn-danger" style="cursor: not-allowed;pointer-events: none;">Not Allowed</a>
+                @endrole
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  @endguest
 @endsection
+
+@push('scripts')
+
+@endpush
+

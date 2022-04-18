@@ -248,7 +248,7 @@ class FilesController extends Controller
                 'title' => 'Expired Documents',
                 'body' => 'Document berikut akan segera expire :'
             ];
-            Mail::to($user_email)->send(new \App\Mail\ReminderMail($details));
+            // Mail::to($user_email)->send(new \App\Mail\ReminderMail($details));
         }
         // send email reminder end
 

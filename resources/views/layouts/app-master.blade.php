@@ -1,54 +1,57 @@
 <!doctype html>
-<html lang="en">
-    <head>
+  <html lang="en">
+  <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.87.0">
-    <title>AJIDMS</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="{!! url('assets/bootstrap/css/bootstrap.min.css') !!}" rel="stylesheet">
-    <!-- datatable -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-
-      .float-right {
-        float: right;
-      }
-    </style>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJI MIS - Manufacturing Integration System</title>
+    <!-- bootstrap -->
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- font awesome -->
+    <link href="{{asset('font-awesome/css/font-awesome.css')}}" rel="stylesheet">
+    <!-- Morris -->
+    <link href="{{asset('css/plugins/morris/morris-0.4.3.min.css')}}" rel="stylesheet">
+    <!-- CSS -->
+    <link href="{{asset('css/animate.css')}}" rel="stylesheet">
+    <link href="{{asset('css/style.css')}}" rel="stylesheet">
     @stack('stylesheets')
+  </head>
+  <body>
+    <div id="wrapper">
+      <!-- navbar -->
+      @auth
+        @include('layouts.nav-master')
+      @endauth
+      <div id="page-wrapper" class="gray-bg">
+        <!-- top navbar -->
+        @include('layouts.nav-top-master')
+        <!-- content -->
+        <div class="wrapper wrapper-content">
+          @yield('content')
+        </div>
+        <!-- footer -->
+        <div class="footer">
+          <div class="float-right">
+          </div>
+          <div>
+            <strong>Copyright</strong> PT Astra Juoku Indonesia &copy; 2022
+          </div>
+        </div>
+      </div>
+    </div>
 
-    
-    <!-- Custom styles for this template -->
-    <link href="{!! url('assets/css/app.css') !!}" rel="stylesheet">
-</head>
-<body>
-    
-    @include('layouts.partials.navbar')
+    <!-- Mainly scripts -->
+    <script src="{{asset('js/jquery-3.1.1.min.js')}}"></script>
+    <script src="{{asset('js/popper.min.js')}}"></script>
+    <script src="{{asset('js/bootstrap.js')}}"></script>
+    <script src="{{asset('js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
+    <script src="{{asset('js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
 
-    <main class="container mt-5">
-        @yield('content')
-    </main>
+    <!-- Custom and plugin javascript -->
+    <script src="{{asset('js/inspinia.js')}}"></script>
+    <script src="{{asset('js/plugins/pace/pace.min.js')}}"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="{!! url('assets/bootstrap/js/bootstrap.bundle.min.js') !!}"></script>
+    <!-- jQuery UI -->
+    <script src="{{asset('js/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     
     @stack('scripts')
 
@@ -56,4 +59,4 @@
 
     @show
   </body>
-</html>
+  </html>
