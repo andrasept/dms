@@ -14,33 +14,58 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['namespace' => 'App\Http\Controllers'], function()
-{   
+{
+
+  // login agil
+  // login 
+  // Route::get('/', function () {
+  //     return view('auth.login');
+  // })->name('login')->middleware('guest');
+  // Route::post('/', [LoginController::class, 'authenticate']);
+
+  // register
+  Route::post('/register', [LoginController::class, 'register'])->name('register');
+  Route::get('/register', function () {
+      return view('auth.register');
+  })->name('halaman_register')->middleware('guest');
+
+  // logout
+  // Route::get('/logout', [LoginController::class, 'logout'])->middleware('auth');
+
+  // forgot password
+  Route::group(['middleware' => ['guest']], function () {
+      Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+      Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
+      Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+      Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+  });
+  // login agil end
+
   /**
    * Home Routes
   */
   // Route::get('/', 'HomeController@index')->name('home.index');
   Route::get('/', 'HomeController@index')->name('home.index');
 
-    Route::group(['middleware' => ['guest']], function() {
-        /**
-         * Register Routes
-         */
-        // Route::get('/register', 'RegisterController@show')->name('register.show');
-        // Route::post('/register', 'RegisterController@register')->name('register.perform');
+  Route::group(['middleware' => ['guest']], function() {
+      /**
+       * Register Routes
+       */
+      // Route::get('/register', 'RegisterController@show')->name('register.show');
+      // Route::post('/register', 'RegisterController@register')->name('register.perform');
 
-        /**
-         * Login Routes
-         */
-        Route::get('/login', 'LoginController@show')->name('login.show');
-        Route::post('/login', 'LoginController@login')->name('login.perform');
+      /**
+       * Login Routes
+       */
+      Route::get('/login', 'LoginController@show')->name('login.show');
+      Route::post('/login', 'LoginController@login')->name('login.perform');
+  });
 
-      });
-
-    Route::group(['middleware' => ['auth', 'permission']], function() { // harus login terlebih dahulu untuk akses route2 di dalam ini
-        /**
-         * Logout Routes
-         */
-        Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
+  Route::group(['middleware' => ['auth', 'permission']], function() { // harus login terlebih dahulu untuk akses route2 di dalam ini
+    /**
+     * Logout Routes
+     */
+    Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
 
         /**
          * User Routes
